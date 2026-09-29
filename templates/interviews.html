@@ -1,0 +1,417 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlacementPro | Interviews</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .interview-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .interview-search {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 24px 0;
+        }
+
+        .interview-search input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 15px;
+            border: 1px solid #30394b;
+            border-radius: 8px;
+            background: #111827;
+            color: #f9fafb;
+            font: inherit;
+        }
+
+        .interview-search input:focus,
+        .form-control:focus {
+            outline: 2px solid #6366f1;
+            outline-offset: 2px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 10px 15px;
+            border: 0;
+            border-radius: 8px;
+            text-decoration: none;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: #6366f1;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4f46e5;
+        }
+
+        .btn-edit {
+            background: #263d68;
+            color: #bfdbfe;
+        }
+
+        .btn-delete {
+            background: #4c252e;
+            color: #fca5a5;
+        }
+
+        .btn-secondary {
+            background: #252e3d;
+            color: #d1d5db;
+        }
+
+        .interview-table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .interview-table {
+            width: 100%;
+            min-width: 1100px;
+            border-collapse: collapse;
+        }
+
+        .interview-table th {
+            padding: 15px 13px;
+            text-align: left;
+            font-size: 11px;
+            letter-spacing: .7px;
+            text-transform: uppercase;
+            color: #929caf;
+            border-bottom: 1px solid #30394b;
+            white-space: nowrap;
+        }
+
+        .interview-table td {
+            padding: 16px 13px;
+            border-bottom: 1px solid #252e3d;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        .interview-table tbody tr:hover {
+            background: rgba(99, 102, 241, .045);
+        }
+
+        .interview-id {
+            color: #a5b4fc;
+            font-weight: 600;
+        }
+
+        .interview-subtext {
+            display: block;
+            margin-top: 5px;
+            font-size: 12px;
+            color: #929caf;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, .12);
+            color: #fbbf24;
+        }
+
+        .status-passed {
+            background: rgba(16, 185, 129, .12);
+            color: #6ee7b7;
+        }
+
+        .status-failed {
+            background: rgba(239, 68, 68, .12);
+            color: #fca5a5;
+        }
+
+        .mode-badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 6px;
+            background: #252e3d;
+            color: #cbd5e1;
+            font-size: 12px;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .table-actions form {
+            margin: 0;
+        }
+
+        .flash-message {
+            padding: 13px 16px;
+            margin-bottom: 18px;
+            border-radius: 9px;
+            background: #202b3a;
+            color: #d1d5db;
+            border: 1px solid #374151;
+        }
+
+        .empty-state {
+            padding: 45px 20px;
+            text-align: center;
+            color: #929caf;
+        }
+
+        .empty-state strong {
+            display: block;
+            margin-bottom: 8px;
+            color: #e5e7eb;
+            font-size: 16px;
+        }
+
+        @media (max-width: 700px) {
+            .interview-toolbar {
+                align-items: stretch;
+            }
+
+            .interview-toolbar .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="app">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <span class="brand-icon">P</span>
+            <span>Placement<span class="accent">Pro</span></span>
+        </div>
+
+        <p class="menu-label">WORKSPACE</p>
+
+        <nav>
+            <a class="nav-link" href="/">▦ &nbsp; Dashboard</a>
+            <a class="nav-link" href="/students">♙ &nbsp; Students</a>
+            <a class="nav-link" href="/companies">▣ &nbsp; Companies</a>
+            <a class="nav-link" href="/jobs">▤ &nbsp; Job Listings</a>
+            <a class="nav-link" href="/applications">⇧ &nbsp; Applications</a>
+            <a class="nav-link active" href="/interviews">◷ &nbsp; Interviews</a>
+            <a href="/placements" class="nav-link">
+    <span>✦</span> Placements
+</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="avatar">PA</div>
+            <div>
+                <strong>Placement Admin</strong>
+                <small>Administrator</small>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main">
+
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">PLACEMENT MANAGEMENT</p>
+                <h1>Interviews</h1>
+            </div>
+
+            <div class="top-right">
+                <span class="live-dot"></span>
+                <span>Academic Year 2026–27</span>
+                <div class="avatar">PA</div>
+            </div>
+        </header>
+
+        <section class="welcome">
+            <div>
+                <p class="eyebrow">INTERVIEW MANAGEMENT</p>
+                <h2>Interview Schedule</h2>
+                <p>Manage interview schedules, modes, and student results.</p>
+            </div>
+            <div class="welcome-icon">◷</div>
+        </section>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <section class="panel">
+
+            <div class="panel-heading interview-toolbar">
+                <div>
+                    <h3>Interview Records</h3>
+                    <p class="muted">View and manage scheduled interviews</p>
+                </div>
+
+                <a href="{{ url_for('add_interview') }}"
+                   class="btn btn-primary">
+                    + Add Interview
+                </a>
+            </div>
+
+            <form class="interview-search"
+                  method="GET"
+                  action="{{ url_for('interviews') }}">
+
+                <input type="text"
+                       name="search"
+                       value="{{ search }}"
+                       placeholder="Search student, job, company or ID...">
+
+                <button type="submit" class="btn btn-primary">
+                    Search
+                </button>
+
+                <a href="{{ url_for('interviews') }}"
+                   class="btn btn-secondary">
+                    Clear
+                </a>
+            </form>
+
+            <div class="interview-table-wrap">
+                <table class="interview-table">
+                    <thead>
+                    <tr>
+                        <th>Interview ID</th>
+                        <th>Student</th>
+                        <th>Job & Company</th>
+                        <th>Date & Time</th>
+                        <th>Mode</th>
+                        <th>Result</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for interview in interviews %}
+                    <tr>
+                        <td>
+                            <span class="interview-id">
+                                {{ interview.INTERVIEW_ID }}
+                            </span>
+                            <span class="interview-subtext">
+                                Application #{{ interview.APPLICATION_ID }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <strong>{{ interview.STUDENT_NAME }}</strong>
+                        </td>
+
+                        <td>
+                            <strong>{{ interview.JOB_TITLE }}</strong>
+                            <span class="interview-subtext">
+                                {{ interview.COMPANY_NAME }}
+                            </span>
+                        </td>
+
+                        <td>
+                            {% if interview.INTERVIEW_DATE %}
+                                {{ interview.INTERVIEW_DATE.strftime('%d %b %Y') }}
+                                <span class="interview-subtext">
+                                    {{ interview.INTERVIEW_DATE.strftime('%I:%M %p') }}
+                                </span>
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <span class="mode-badge">
+                                {{ interview.INTERVIEW_MODE }}
+                            </span>
+                        </td>
+
+                        <td>
+                            {% set result = (interview.RESULT or 'Pending')|lower %}
+                            <span class="status-badge
+                                {% if result == 'passed' %}
+                                    status-passed
+                                {% elif result == 'failed' %}
+                                    status-failed
+                                {% else %}
+                                    status-pending
+                                {% endif %}">
+                                {{ interview.RESULT or 'Pending' }}
+                            </span>
+                        </td>
+
+                        <td>
+                            <div class="table-actions">
+                                <a class="btn btn-edit"
+                                   href="{{ url_for('edit_interview',
+                                                    interview_id=interview.INTERVIEW_ID) }}">
+                                    Edit
+                                </a>
+
+                                <form method="POST"
+                                      action="{{ url_for('delete_interview',
+                                                         interview_id=interview.INTERVIEW_ID) }}"
+                                      onsubmit="return confirm('Are you sure you want to delete this interview?');">
+
+                                    <button type="submit" class="btn btn-delete">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+
+                    {% else %}
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <strong>No interviews found</strong>
+                                Try another search or add a new interview.
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+
+        <footer>
+            Student Placement Management System
+            <span>Powered by Oracle Database</span>
+        </footer>
+
+    </main>
+</div>
+</body>
+</html>

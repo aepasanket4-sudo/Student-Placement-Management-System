@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PlacementPro | Add Company</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <span class="brand-icon">P</span>
+            <span>Placement<span class="accent">Pro</span></span>
+        </div>
+
+        <p class="menu-label">WORKSPACE</p>
+
+        <nav>
+            <a class="nav-link" href="/">▦ &nbsp; Dashboard</a>
+            <a class="nav-link" href="/students">♙ &nbsp; Students</a>
+            <a class="nav-link active" href="/companies">▣ &nbsp; Companies</a>
+            <a class="nav-link" href="#">▤ &nbsp; Job Listings</a>
+            <a class="nav-link" href="#">⇧ &nbsp; Applications</a>
+            <a class="nav-link" href="#">◷ &nbsp; Interviews</a>
+            <a class="nav-link" href="#">◆ &nbsp; Placements</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="avatar">PA</div>
+            <div>
+                <strong>Placement Admin</strong>
+                <small>Administrator</small>
+            </div>
+        </div>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">WORKSPACE</p>
+                <h1>Add Company</h1>
+            </div>
+
+            <div class="top-right">
+                <span class="live-dot"></span>
+                <span>Company Management</span>
+                <div class="avatar">PA</div>
+            </div>
+        </header>
+
+
+        <section class="welcome">
+            <div>
+                <p class="eyebrow">COMPANY MANAGEMENT</p>
+                <h2>Register a Company 🏢</h2>
+                <p>Add a new company to your placement database.</p>
+            </div>
+
+            <div class="welcome-icon">🏢</div>
+        </section>
+
+
+        <!-- Company Form -->
+        <section class="panel" style="margin-top:24px;">
+
+            <div class="panel-heading">
+                <h3>Company Details</h3>
+                <p class="muted">Enter the company information below.</p>
+            </div>
+
+            <form method="POST"
+                  action="{{ url_for('add_company') }}"
+                  style="margin-top:24px;">
+
+                <!-- Company Name -->
+                <div style="margin-bottom:20px;">
+                    <label for="company_name"
+                           style="display:block; margin-bottom:8px;">
+                        Company Name *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="company_name"
+                        name="company_name"
+                        placeholder="Enter company name"
+                        maxlength="100"
+                        required
+                        style="width:100%; box-sizing:border-box;
+                               padding:13px; border-radius:8px;
+                               border:1px solid #293650;
+                               background:#0b1223; color:#e5e7eb;"
+                    >
+                </div>
+
+
+                <!-- Industry -->
+                <div style="margin-bottom:20px;">
+                    <label for="industry"
+                           style="display:block; margin-bottom:8px;">
+                        Industry
+                    </label>
+
+                    <input
+                        type="text"
+                        id="industry"
+                        name="industry"
+                        placeholder="e.g. Information Technology"
+                        maxlength="100"
+                        style="width:100%; box-sizing:border-box;
+                               padding:13px; border-radius:8px;
+                               border:1px solid #293650;
+                               background:#0b1223; color:#e5e7eb;"
+                    >
+                </div>
+
+
+                <!-- Location -->
+                <div style="margin-bottom:20px;">
+                    <label for="location"
+                           style="display:block; margin-bottom:8px;">
+                        Location
+                    </label>
+
+                    <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        placeholder="e.g. Ahmedabad, Gujarat"
+                        maxlength="100"
+                        style="width:100%; box-sizing:border-box;
+                               padding:13px; border-radius:8px;
+                               border:1px solid #293650;
+                               background:#0b1223; color:#e5e7eb;"
+                    >
+                </div>
+
+
+                <!-- HR Email -->
+                <div style="margin-bottom:28px;">
+                    <label for="hr_email"
+                           style="display:block; margin-bottom:8px;">
+                        HR Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="hr_email"
+                        name="hr_email"
+                        placeholder="e.g. hr@company.com"
+                        maxlength="100"
+                        style="width:100%; box-sizing:border-box;
+                               padding:13px; border-radius:8px;
+                               border:1px solid #293650;
+                               background:#0b1223; color:#e5e7eb;"
+                    >
+                </div>
+
+
+                <!-- Buttons -->
+                <div style="display:flex; gap:12px; flex-wrap:wrap;">
+
+                    <button
+                        type="submit"
+                        style="padding:13px 24px;
+                               border:0; border-radius:8px;
+                               background:#526fff; color:white;
+                               cursor:pointer; font-weight:600;">
+                        Save Company
+                    </button>
+
+                    <a
+                        href="{{ url_for('companies') }}"
+                        style="padding:13px 24px;
+                               border-radius:8px;
+                               border:1px solid #293650;
+                               color:#e5e7eb;
+                               text-decoration:none;">
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <footer>
+            Student Placement Management System
+            <span>Powered by Oracle Database</span>
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PlacementPro | Edit Student</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <span class="brand-icon">P</span>
+            <span>Placement<span class="accent">Pro</span></span>
+        </div>
+
+        <p class="menu-label">WORKSPACE</p>
+
+        <nav>
+            <a class="nav-link" href="/">▦ &nbsp; Dashboard</a>
+            <a class="nav-link active" href="/students">♙ &nbsp; Students</a>
+            <a class="nav-link" href="#">▣ &nbsp; Companies</a>
+            <a class="nav-link" href="#">▤ &nbsp; Job Listings</a>
+            <a class="nav-link" href="#">⇧ &nbsp; Applications</a>
+            <a class="nav-link" href="#">◷ &nbsp; Interviews</a>
+            <a class="nav-link" href="#">◆ &nbsp; Placements</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="avatar">PA</div>
+            <div>
+                <strong>Placement Admin</strong>
+                <small>Administrator</small>
+            </div>
+        </div>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <!-- Header -->
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">WORKSPACE</p>
+                <h1>Edit Student</h1>
+            </div>
+
+            <div class="top-right">
+                <span class="live-dot"></span>
+                <span>Student Records</span>
+                <div class="avatar">PA</div>
+            </div>
+        </header>
+
+
+        <!-- Welcome Section -->
+        <section class="welcome">
+            <div>
+                <p class="eyebrow">STUDENT MANAGEMENT</p>
+                <h2>Update Student Details ✏️</h2>
+                <p>
+                    Modify the student's information and save your changes.
+                </p>
+            </div>
+
+            <div class="welcome-icon">🎓</div>
+        </section>
+
+
+        <!-- Edit Form -->
+        <section class="panel" style="margin-top:24px;">
+
+            <div class="panel-heading">
+                <h3>Edit Student #{{ student[0] }}</h3>
+                <p class="muted">
+                    Update the fields below.
+                </p>
+            </div>
+
+
+            <form method="POST"
+                  action="{{ url_for('edit_student',
+                                     student_id=student[0]) }}"
+                  style="margin-top:24px;">
+
+                <!-- Student Name -->
+                <div style="margin-bottom:20px;">
+                    <label for="student_name"
+                           style="display:block; margin-bottom:8px;">
+                        Student Name *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="student_name"
+                        name="student_name"
+                        value="{{ student[1] }}"
+                        placeholder="Enter student name"
+                        required
+                        style="width:100%; box-sizing:border-box;
+                               padding:13px; border-radius:8px;
+                               border:1px solid #293650;
+                               background:#0b1223; color:#e5e7eb;"
+                    >
+                </div>
+
+
+                <!-- Email -->
+                <div style="margin-bottom:20px;">
+                    <label for="email"
+                           style="display:block; margin-bottom:8px;">
+                        Email Address *
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="{{ student[2] }}"
+                        placeholder="Enter email address"
+                        required
+                        style="width:100%; box-sizing:border-box;
+                               padding:13px; border-radius:8px;
+                               border:1px solid #293650;
+                               background:#0b1223; color:#e5e7eb;"
+                    >
+                </div>
+
+
+                <!-- Phone -->
+                <div style="margin-bottom:20px;">
+                    <label for="phone"
+                           style="display:block; margin-bottom:8px;">
+                        Phone Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="phone"
+                        name="phone"
+                        value="{{ student[3] or '' }}"
+                        placeholder="Enter phone number"
+                        style="width:100%; box-sizing:border-box;
+                               padding:13px; border-radius:8px;
+                               border:1px solid #293650;
+                               background:#0b1223; color:#e5e7eb;"
+                    >
+                </div>
+
+
+                <!-- CGPA -->
+                <div style="margin-bottom:20px;">
+                    <label for="cgpa"
+                           style="display:block; margin-bottom:8px;">
+                        CGPA
+                    </label>
+
+                    <input
+                        type="number"
+                        id="cgpa"
+                        name="cgpa"
+                        value="{{ student[4] if student[4] is not none else '' }}"
+                        placeholder="Enter CGPA"
+                        min="0"
+                        max="10"
+                        step="0.01"
+                        style="width:100%; box-sizing:border-box;
+                               padding:13px; border-radius:8px;
+                               border:1px solid #293650;
+                               background:#0b1223; color:#e5e7eb;"
+                    >
+                </div>
+
+
+                <!-- Department -->
+                <div style="margin-bottom:20px;">
+                    <label for="department_id"
+                           style="display:block; margin-bottom:8px;">
+                        Department *
+                    </label>
+
+                    <select
+                        id="department_id"
+                        name="department_id"
+                        required
+                        style="width:100%; box-sizing:border-box;
+                               padding:13px; border-radius:8px;
+                               border:1px solid #293650;
+                               background:#0b1223; color:#e5e7eb;"
+                    >
+
+                        {% for department in departments %}
+
+                        <option
+                            value="{{ department[0] }}"
+                            {% if department[0] == student[5] %}
+                                selected
+                            {% endif %}
+                        >
+                            {{ department[1] }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+
+                <!-- Graduation Year -->
+                <div style="margin-bottom:28px;">
+                    <label for="graduation_year"
+                           style="display:block; margin-bottom:8px;">
+                        Graduation Year
+                    </label>
+
+                    <input
+                        type="number"
+                        id="graduation_year"
+                        name="graduation_year"
+                        value="{{ student[6] or '' }}"
+                        placeholder="e.g. 2027"
+                        min="2000"
+                        max="2100"
+                        style="width:100%; box-sizing:border-box;
+                               padding:13px; border-radius:8px;
+                               border:1px solid #293650;
+                               background:#0b1223; color:#e5e7eb;"
+                    >
+                </div>
+
+
+                <!-- Buttons -->
+                <div style="display:flex; gap:12px; flex-wrap:wrap;">
+
+                    <button
+                        type="submit"
+                        style="padding:13px 24px; border:0;
+                               border-radius:8px; background:#526fff;
+                               color:white; cursor:pointer;
+                               font-weight:600;"
+                    >
+                        Save Changes
+                    </button>
+
+                    <a
+                        href="{{ url_for('students') }}"
+                        style="padding:13px 24px; border-radius:8px;
+                               border:1px solid #293650;
+                               color:#e5e7eb; text-decoration:none;"
+                    >
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- Footer -->
+        <footer>
+            Student Placement Management System
+            <span>Powered by Oracle Database</span>
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

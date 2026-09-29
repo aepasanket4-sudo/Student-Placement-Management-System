@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Placement | PlacementPro</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="app">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">P</div>
+            <span>Placement<span class="accent">Pro</span></span>
+        </div>
+
+        <div class="menu-label">WORKSPACE</div>
+
+        <nav>
+            <a href="/" class="nav-link">▦ Dashboard</a>
+            <a href="/students" class="nav-link">♙ Students</a>
+            <a href="/companies" class="nav-link">▣ Companies</a>
+            <a href="/jobs" class="nav-link">▤ Jobs</a>
+            <a href="/applications" class="nav-link">▧ Applications</a>
+            <a href="/interviews" class="nav-link">◷ Interviews</a>
+            <a href="/placements" class="nav-link active">✦ Placements</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="avatar">A</div>
+            <div>
+                <strong>Admin</strong>
+                <small>Placement Administrator</small>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main">
+
+        <header class="topbar">
+            <span class="eyebrow">WORKSPACE / PLACEMENTS / ADD</span>
+        </header>
+
+        <section class="welcome">
+            <div>
+                <span class="eyebrow">NEW RECORD</span>
+                <h1>Add Placement</h1>
+                <p class="muted">
+                    Record a student's successful placement.
+                </p>
+            </div>
+        </section>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <section class="panel form-panel">
+
+            <div class="panel-heading">
+                <div>
+                    <h2>Placement Details</h2>
+                    <p class="muted">Fill in all required fields.</p>
+                </div>
+            </div>
+
+            <form method="POST"
+                  action="{{ url_for('add_placement') }}"
+                  class="data-form">
+
+                <div class="form-group">
+                    <label for="student_id">Student</label>
+                    <select id="student_id" name="student_id" required>
+                        <option value="">Select student</option>
+                        {% for student in students %}
+                            <option value="{{ student[0] }}">
+                                {{ student[1] }} (ID: {{ student[0] }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="company_id">Company</label>
+                    <select id="company_id" name="company_id" required>
+                        <option value="">Select company</option>
+                        {% for company in companies %}
+                            <option value="{{ company[0] }}">
+                                {{ company[1] }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="job_id">Job</label>
+                    <select id="job_id" name="job_id" required>
+                        <option value="">Select job</option>
+                        {% for job in jobs %}
+                            <option value="{{ job[0] }}"
+                                    data-company="{{ job[2] }}">
+                                {{ job[1] }} (ID: {{ job[0] }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <small class="muted">
+                        Select a job that belongs to the chosen company.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="placement_date">Placement Date</label>
+                    <input
+                        type="date"
+                        id="placement_date"
+                        name="placement_date"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="package_lpa">Package (LPA)</label>
+                    <input
+                        type="number"
+                        id="package_lpa"
+                        name="package_lpa"
+                        min="0.01"
+                        step="0.01"
+                        placeholder="e.g. 8.50"
+                        required
+                    >
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        Save Placement
+                    </button>
+
+                    <a href="{{ url_for('placements') }}"
+                       class="btn btn-secondary">
+                        Cancel
+                    </a>
+                </div>
+
+            </form>
+        </section>
+
+    </main>
+</div>
+
+<script>
+    const companySelect = document.getElementById("company_id");
+    const jobSelect = document.getElementById("job_id");
+
+    function filterJobs() {
+        const selectedCompany = companySelect.value;
+
+        for (const option of jobSelect.options) {
+            if (!option.value) {
+                option.hidden = false;
+                continue;
+            }
+
+            option.hidden =
+                selectedCompany !== "" &&
+                option.dataset.company !== selectedCompany;
+        }
+
+        if (
+            jobSelect.selectedOptions.length &&
+            jobSelect.selectedOptions[0].hidden
+        ) {
+            jobSelect.value = "";
+        }
+    }
+
+    companySelect.addEventListener("change", filterJobs);
+    filterJobs();
+</script>
+
+</body>
+</html>

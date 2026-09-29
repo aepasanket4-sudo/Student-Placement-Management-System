@@ -1,0 +1,293 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PlacementPro | Edit Application</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <span class="brand-icon">P</span>
+            <span>Placement<span class="accent">Pro</span></span>
+        </div>
+
+        <p class="menu-label">WORKSPACE</p>
+
+        <nav>
+            <a class="nav-link" href="/">
+                ▦ &nbsp; Dashboard
+            </a>
+
+            <a class="nav-link" href="/students">
+                ♙ &nbsp; Students
+            </a>
+
+            <a class="nav-link" href="/companies">
+                ▣ &nbsp; Companies
+            </a>
+
+            <a class="nav-link" href="/jobs">
+                ▤ &nbsp; Job Listings
+            </a>
+
+            <a class="nav-link active" href="/applications">
+                ⇧ &nbsp; Applications
+            </a>
+
+            <a class="nav-link" href="#">
+                ◷ &nbsp; Interviews
+            </a>
+
+            <a class="nav-link" href="#">
+                ◆ &nbsp; Placements
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="avatar">PA</div>
+            <div>
+                <strong>Placement Admin</strong>
+                <small>Administrator</small>
+            </div>
+        </div>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <!-- Header -->
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">WORKSPACE</p>
+                <h1>Edit Application</h1>
+            </div>
+
+            <div class="top-right">
+                <span class="live-dot"></span>
+                <span>Application Records</span>
+                <div class="avatar">PA</div>
+            </div>
+        </header>
+
+        <!-- Welcome Section -->
+        <section class="welcome">
+            <div>
+                <p class="eyebrow">APPLICATION MANAGEMENT</p>
+                <h2>Update Application Details 📝</h2>
+                <p>
+                    Edit the student, job opportunity, and status
+                    associated with this application.
+                </p>
+            </div>
+
+            <div class="welcome-icon">📝</div>
+        </section>
+
+        <!-- Edit Application Panel -->
+        <section class="panel" style="margin-top:24px;">
+
+            <!-- Panel Heading -->
+            <div class="panel-heading">
+                <h3>Edit Application #{{ application.APPLICATION_ID }}</h3>
+                <p class="muted">
+                    Update the information below and save your changes.
+                </p>
+            </div>
+
+            <!-- Edit Form -->
+            <form method="POST"
+                  action="{{ url_for('edit_application', application_id=application.APPLICATION_ID) }}"
+                  style="max-width:750px;">
+
+                <!-- Application ID -->
+                <div style="margin:22px 0;">
+                    <label for="application_id"
+                           style="display:block;
+                                  margin-bottom:8px;
+                                  font-weight:600;">
+                        Application ID
+                    </label>
+
+                    <input
+                        type="text"
+                        id="application_id"
+                        value="{{ application.APPLICATION_ID }}"
+                        readonly
+                        style="width:100%;
+                               box-sizing:border-box;
+                               padding:12px;
+                               border-radius:8px;
+                               border:1px solid #293650;
+                               background:#111a2e;
+                               color:#9ca3af;"
+                    >
+                </div>
+
+                <!-- Student -->
+                <div style="margin:22px 0;">
+                    <label for="student_id"
+                           style="display:block;
+                                  margin-bottom:8px;
+                                  font-weight:600;">
+                        Select Student
+                    </label>
+
+                    <select
+                        id="student_id"
+                        name="student_id"
+                        required
+                        style="width:100%;
+                               box-sizing:border-box;
+                               padding:12px;
+                               border-radius:8px;
+                               border:1px solid #293650;
+                               background:#0b1223;
+                               color:#e5e7eb;">
+
+                        {% for student in students %}
+                            <option
+                                value="{{ student[0] }}"
+                                {% if student[0] == application.STUDENT_ID %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ student[1] }} (ID: {{ student[0] }})
+                            </option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+                <!-- Job -->
+                <div style="margin:22px 0;">
+                    <label for="job_id"
+                           style="display:block;
+                                  margin-bottom:8px;
+                                  font-weight:600;">
+                        Select Job
+                    </label>
+
+                    <select
+                        id="job_id"
+                        name="job_id"
+                        required
+                        style="width:100%;
+                               box-sizing:border-box;
+                               padding:12px;
+                               border-radius:8px;
+                               border:1px solid #293650;
+                               background:#0b1223;
+                               color:#e5e7eb;">
+
+                        {% for job in jobs %}
+                            <option
+                                value="{{ job[0] }}"
+                                {% if job[0] == application.JOB_ID %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ job[1] }} (Job ID: {{ job[0] }})
+                            </option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+                <!-- Application Status -->
+                <div style="margin:22px 0;">
+                    <label for="status"
+                           style="display:block;
+                                  margin-bottom:8px;
+                                  font-weight:600;">
+                        Application Status
+                    </label>
+
+                    <select
+                        id="status"
+                        name="status"
+                        required
+                        style="width:100%;
+                               box-sizing:border-box;
+                               padding:12px;
+                               border-radius:8px;
+                               border:1px solid #293650;
+                               background:#0b1223;
+                               color:#e5e7eb;">
+
+                        {% for status_option in
+                            ['Applied', 'Shortlisted', 'Selected', 'Rejected'] %}
+
+                            <option
+                                value="{{ status_option }}"
+                                {% if status_option == application.STATUS %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ status_option }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+                <!-- Buttons -->
+                <div style="display:flex;
+                            gap:12px;
+                            flex-wrap:wrap;
+                            margin-top:30px;">
+
+                    <button
+                        type="submit"
+                        style="padding:12px 22px;
+                               border:0;
+                               border-radius:8px;
+                               background:#526fff;
+                               color:white;
+                               cursor:pointer;
+                               font-weight:600;">
+                        Save Changes
+                    </button>
+
+                    <a
+                        href="{{ url_for('applications') }}"
+                        style="padding:12px 22px;
+                               text-decoration:none;
+                               border-radius:8px;
+                               background:#293650;
+                               color:#e5e7eb;
+                               display:inline-block;">
+                        Cancel
+                    </a>
+
+                </div>
+
+            </form>
+
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            Student Placement Management System
+            <span>Powered by Oracle Database</span>
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

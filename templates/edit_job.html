@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Job | PlacementPro</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="form-container">
+    <h1>Edit Job</h1>
+    <p>Update the job details below.</p>
+
+    <form method="POST">
+
+        <div class="form-group">
+            <label>Company</label>
+            <select name="company_id" required>
+                {% for company in companies %}
+                <option value="{{ company[0] }}"
+                    {% if company[0] == job[1] %}selected{% endif %}>
+                    {{ company[1] }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Job Title</label>
+            <input type="text" name="job_title"
+                   value="{{ job[2] }}" required>
+        </div>
+
+        <div class="form-group">
+            <label>Job Type</label>
+            <input type="text" name="job_type"
+                   value="{{ job[3] or '' }}">
+        </div>
+
+        <div class="form-group">
+            <label>Salary (LPA)</label>
+            <input type="number" step="0.01" name="salary"
+                   value="{{ job[4] if job[4] is not none else '' }}">
+        </div>
+
+        <div class="form-group">
+            <label>Minimum CGPA</label>
+            <input type="number" step="0.01" name="minimum_cgpa"
+                   value="{{ job[5] if job[5] is not none else '' }}">
+        </div>
+
+        <div class="form-group">
+            <label>Job Location</label>
+            <input type="text" name="job_location"
+                   value="{{ job[6] or '' }}">
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Update Job
+        </button>
+
+        <a href="{{ url_for('jobs') }}" class="btn">
+            Cancel
+        </a>
+    </form>
+</div>
+
+</body>
+</html>

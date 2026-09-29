@@ -1,0 +1,348 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PlacementPro | Applications</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <span class="brand-icon">P</span>
+            <span>Placement<span class="accent">Pro</span></span>
+        </div>
+
+        <p class="menu-label">WORKSPACE</p>
+
+        <nav>
+            <a class="nav-link" href="/">
+                ▦ &nbsp; Dashboard
+            </a>
+
+            <a class="nav-link" href="/students">
+                ♙ &nbsp; Students
+            </a>
+
+            <a class="nav-link" href="/companies">
+                ▣ &nbsp; Companies
+            </a>
+
+            <a class="nav-link" href="/jobs">
+                ▤ &nbsp; Job Listings
+            </a>
+
+            <a class="nav-link active" href="/applications">
+                ⇧ &nbsp; Applications
+            </a>
+
+            <a class="nav-link" href="/interviews">
+                ◷ &nbsp; Interviews
+            </a>
+
+            <a href="/placements" class="nav-link">
+    <span>✦</span> Placements
+</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="avatar">PA</div>
+            <div>
+                <strong>Placement Admin</strong>
+                <small>Administrator</small>
+            </div>
+        </div>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <!-- Header -->
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">WORKSPACE</p>
+                <h1>Applications</h1>
+            </div>
+
+            <div class="top-right">
+                <span class="live-dot"></span>
+                <span>Application Records</span>
+                <div class="avatar">PA</div>
+            </div>
+        </header>
+
+        <!-- Welcome Section -->
+        <section class="welcome">
+            <div>
+                <p class="eyebrow">APPLICATION MANAGEMENT</p>
+                <h2>Track Student Applications 📋</h2>
+                <p>
+                    View, search, and manage student applications
+                    for available job opportunities.
+                </p>
+            </div>
+
+            <div class="welcome-icon">📋</div>
+        </section>
+
+        <!-- Applications Panel -->
+        <section class="panel" style="margin-top:24px;">
+
+            <!-- Panel Heading -->
+            <div class="panel-heading"
+                 style="display:flex;
+                        justify-content:space-between;
+                        align-items:center;
+                        gap:16px;
+                        flex-wrap:wrap;">
+
+                <div>
+                    <h3>All Applications</h3>
+                    <p class="muted">
+                        {{ applications|length }} matching records
+                    </p>
+                </div>
+
+                <!-- Add Application Button -->
+                <a href="{{ url_for('add_application') }}"
+                   style="padding:12px 18px;
+                          text-decoration:none;
+                          border-radius:8px;
+                          background:#526fff;
+                          color:white;
+                          white-space:nowrap;">
+                    + Add Application
+                </a>
+
+            </div>
+
+            <!-- Search Form -->
+            <form method="GET"
+                  action="{{ url_for('applications') }}"
+                  style="display:flex;
+                         gap:12px;
+                         margin:20px 0;
+                         flex-wrap:wrap;">
+
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search by student, job, company, status..."
+                    value="{{ search }}"
+                    style="flex:1;
+                           min-width:200px;
+                           padding:12px;
+                           border-radius:8px;
+                           border:1px solid #293650;
+                           background:#0b1223;
+                           color:#e5e7eb;"
+                >
+
+                <button
+                    type="submit"
+                    style="padding:12px 20px;
+                           border:0;
+                           border-radius:8px;
+                           cursor:pointer;">
+                    Search
+                </button>
+
+                <a href="{{ url_for('applications') }}"
+                   style="padding:12px;
+                          text-decoration:none;">
+                    Clear
+                </a>
+
+            </form>
+
+            <!-- Applications Table -->
+            <div style="overflow-x:auto;">
+
+                <table style="width:100%;
+                              border-collapse:collapse;
+                              text-align:left;
+                              min-width:1150px;">
+
+                    <thead>
+                        <tr>
+                            <th style="padding:14px;">Application ID</th>
+                            <th style="padding:14px;">Student ID</th>
+                            <th style="padding:14px;">Student Name</th>
+                            <th style="padding:14px;">Job ID</th>
+                            <th style="padding:14px;">Job Title</th>
+                            <th style="padding:14px;">Company</th>
+                            <th style="padding:14px;">Application Date</th>
+                            <th style="padding:14px;">Status</th>
+                            <th style="padding:14px;">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for application in applications %}
+
+                        <tr style="border-top:1px solid #293650;">
+
+                            <td style="padding:14px;">
+                                {{ application.APPLICATION_ID }}
+                            </td>
+
+                            <td style="padding:14px;">
+                                {{ application.STUDENT_ID }}
+                            </td>
+
+                            <td style="padding:14px;">
+                                {{ application.STUDENT_NAME }}
+                            </td>
+
+                            <td style="padding:14px;">
+                                {{ application.JOB_ID }}
+                            </td>
+
+                            <td style="padding:14px;">
+                                {{ application.JOB_TITLE }}
+                            </td>
+
+                            <td style="padding:14px;">
+                                {{ application.COMPANY_NAME }}
+                            </td>
+
+                            <td style="padding:14px; white-space:nowrap;">
+                                {% if application.APPLICATION_DATE %}
+                                    {{ application.APPLICATION_DATE.strftime('%d-%m-%Y') }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+
+                            <!-- Application Status -->
+                            <td style="padding:14px;">
+
+                                {% if application.STATUS == 'Selected' %}
+
+                                    <span style="display:inline-block;
+                                                 padding:6px 10px;
+                                                 border-radius:20px;
+                                                 background:#14532d;
+                                                 color:#86efac;
+                                                 font-size:12px;">
+                                        Selected
+                                    </span>
+
+                                {% elif application.STATUS == 'Rejected' %}
+
+                                    <span style="display:inline-block;
+                                                 padding:6px 10px;
+                                                 border-radius:20px;
+                                                 background:#7f1d1d;
+                                                 color:#fca5a5;
+                                                 font-size:12px;">
+                                        Rejected
+                                    </span>
+
+                                {% elif application.STATUS == 'Shortlisted' %}
+
+                                    <span style="display:inline-block;
+                                                 padding:6px 10px;
+                                                 border-radius:20px;
+                                                 background:#78350f;
+                                                 color:#fcd34d;
+                                                 font-size:12px;">
+                                        Shortlisted
+                                    </span>
+
+                                {% else %}
+
+                                    <span style="display:inline-block;
+                                                 padding:6px 10px;
+                                                 border-radius:20px;
+                                                 background:#1e3a8a;
+                                                 color:#bfdbfe;
+                                                 font-size:12px;">
+                                        {{ application.STATUS or 'Applied' }}
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <!-- Edit and Delete Actions -->
+                            <td style="padding:14px; white-space:nowrap;">
+
+                                <!-- Edit Button -->
+                                <a href="{{ url_for('edit_application', application_id=application.APPLICATION_ID) }}"
+                                   style="display:inline-block;
+                                          padding:8px 12px;
+                                          margin-right:5px;
+                                          text-decoration:none;
+                                          border-radius:6px;
+                                          background:#526fff;
+                                          color:white;">
+                                    Edit
+                                </a>
+
+                                <!-- Delete Button -->
+                                <form method="POST"
+                                      action="{{ url_for('delete_application', application_id=application.APPLICATION_ID) }}"
+                                      style="display:inline;"
+                                      onsubmit="return confirm('Are you sure you want to delete this application?');">
+
+                                    <button type="submit"
+                                            style="padding:8px 12px;
+                                                   border:0;
+                                                   border-radius:6px;
+                                                   background:#dc2626;
+                                                   color:white;
+                                                   cursor:pointer;">
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </td>
+
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+                            <td colspan="9"
+                                style="padding:24px;
+                                       text-align:center;">
+                                No applications found.
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            Student Placement Management System
+            <span>Powered by Oracle Database</span>
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+</html>

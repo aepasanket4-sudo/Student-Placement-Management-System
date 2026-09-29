@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlacementPro | Dashboard</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="app">
+    <aside class="sidebar">
+        <div class="brand">
+            <span class="brand-icon">P</span>
+            <span>Placement<span class="accent">Pro</span></span>
+        </div>
+
+        <p class="menu-label">WORKSPACE</p>
+
+        <nav>
+    <a class="nav-link active" href="/">
+        ▦ &nbsp; Dashboard
+    </a>
+
+    <a class="nav-link" href="/students">
+        ♙ &nbsp; Students
+    </a>
+
+    <a class="nav-link" href="/companies">
+        ▣ &nbsp; Companies
+    </a>
+
+    <a class="nav-link" href="/jobs">
+        ▤ &nbsp; Job Listings
+    </a>
+
+    <a class="nav-link" href="/applications">
+        ⇧ &nbsp; Applications
+    </a>
+
+    <a class="nav-link" href="/interviews">
+        ◷ &nbsp; Interviews
+    </a>
+
+    <a href="/placements" class="nav-link">
+    <span>✦</span> Placements
+</a>
+</nav>
+
+        <div class="sidebar-bottom">
+            <div class="avatar">PA</div>
+            <div>
+                <strong>Placement Admin</strong>
+                <small>Administrator</small>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">OVERVIEW</p>
+                <h1>Dashboard</h1>
+            </div>
+            <div class="top-right">
+                <span class="live-dot"></span>
+                <span>Academic Year 2026–27</span>
+                <div class="avatar">PA</div>
+            </div>
+        </header>
+
+        <section class="welcome">
+            <div>
+                <p class="eyebrow">PLACEMENT MANAGEMENT SYSTEM</p>
+                <h2>Welcome back, Admin 👋</h2>
+                <p>Here's what's happening with your placements today.</p>
+            </div>
+            <div class="welcome-icon">🎓</div>
+        </section>
+
+        <section class="stats">
+            <article class="stat-card">
+                <div class="stat-top">
+                    <span>Total Students</span>
+                    <span class="stat-icon blue">♙</span>
+                </div>
+                <h3>{{ stats.students }}</h3>
+                <p class="muted">Registered students</p>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-top">
+                    <span>Applications</span>
+                    <span class="stat-icon purple">▤</span>
+                </div>
+                <h3>{{ stats.applications }}</h3>
+                <p class="muted">Submitted applications</p>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-top">
+                    <span>Students Placed</span>
+                    <span class="stat-icon green">✓</span>
+                </div>
+                <h3><h3>{{ stats.placements }}</h3></h3>
+                <p class="muted">Successful placements</p>
+            </article>
+
+            <article class="stat-card">
+                <div class="stat-top">
+                    <span>Highest Package</span>
+                    <span class="stat-icon orange">₹</span>
+                </div>
+                <h3>{{ "%.2f"|format(stats.highest_package) }} <small>LPA</small></h3>
+                <p class="muted">Highest recorded package</p>
+            </article>
+        </section>
+
+        <section class="content-grid">
+            <article class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h3>Placement Snapshot</h3>
+                        <p class="muted">Current placement overview</p>
+                    </div>
+                    <span class="tag">2026–27</span>
+                </div>
+
+                <div class="placement-summary">
+                    <div class="summary-number">
+    {{ stats.placements }}
+    <span>/ {{ stats.students }}</span>
+</div>
+
+<p class="muted">Students placed</p>
+
+<div class="progress">
+    <div class="progress-fill"
+         style="width: {{ stats.placement_rate }}%;">
+    </div>
+</div>
+
+<div class="summary-footer">
+    <span>Placement rate</span>
+    <strong>{{ "%.1f"|format(stats.placement_rate) }}%</strong>
+</div>
+                </div>
+            </article>
+
+            <article class="panel">
+                <div class="panel-heading">
+                    <div>
+                        <h3>Quick Overview</h3>
+                        <p class="muted">Your placement database</p>
+                    </div>
+                </div>
+
+                <div class="overview-row">
+                    <span class="overview-icon">▣</span>
+                    <span>Partner Companies</span>
+                    <strong><strong>{{ stats.companies }}</strong></strong>
+                </div>
+                <div class="overview-row">
+                    <span class="overview-icon">▤</span>
+                    <span>Available Jobs</span>
+                    <strong><strong>{{ stats.jobs }}</strong></strong>
+                </div>
+                <div class="overview-row">
+                    <span class="overview-icon">◷</span>
+                    <span>Interviews Scheduled</span>
+                    <strong><strong>{{ stats.interviews }}</strong></strong>
+                </div>
+            </article>
+        </section>
+
+        <footer>
+            Student Placement Management System
+            <span>Powered by Oracle Database</span>
+        </footer>
+    </main>
+</div>
+
+</body>
+</html>

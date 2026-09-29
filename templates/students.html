@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlacementPro | Students</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="app">
+    <aside class="sidebar">
+        <div class="brand">
+            <span class="brand-icon">P</span>
+            <span>Placement<span class="accent">Pro</span></span>
+        </div>
+
+        <p class="menu-label">WORKSPACE</p>
+
+        <nav>
+    <a class="nav-link" href="/">
+        ▦ &nbsp; Dashboard
+    </a>
+
+    <a class="nav-link active" href="/students">
+        ♙ &nbsp; Students
+    </a>
+
+    <a class="nav-link" href="/companies">
+        ▣ &nbsp; Companies
+    </a>
+
+    <a class="nav-link" href="/jobs">
+        ▤ &nbsp; Job Listings
+    </a>
+
+    <a class="nav-link" href="/applications">
+        ⇧ &nbsp; Applications
+    </a>
+
+    <a class="nav-link" href="/interviews">
+        ◷ &nbsp; Interviews
+    </a>
+
+    <a class="nav-link" href="#">
+        ◆ &nbsp; Placements
+    </a>
+</nav>
+
+        <div class="sidebar-bottom">
+            <div class="avatar">PA</div>
+            <div>
+                <strong>Placement Admin</strong>
+                <small>Administrator</small>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">WORKSPACE</p>
+                <h1>Students</h1>
+            </div>
+
+            <div class="top-right">
+                <span class="live-dot"></span>
+                <span>Student Records</span>
+                <div class="avatar">PA</div>
+            </div>
+        </header>
+
+        <section class="welcome">
+            <div>
+                <p class="eyebrow">STUDENT MANAGEMENT</p>
+                <h2>Student Directory 🎓</h2>
+                <p>View and search registered student records.</p>
+            </div>
+
+            <div class="welcome-icon">👨‍🎓</div>
+        </section>
+
+        <section class="panel" style="margin-top: 24px;">
+
+            <!-- Panel Heading -->
+            <div class="panel-heading"
+                 style="display:flex; justify-content:space-between;
+                        align-items:center; gap:16px;">
+
+                <div>
+                    <h3>All Students</h3>
+                    <p class="muted">
+                        {{ students|length }} matching records
+                    </p>
+                </div>
+
+                <a href="/students/add"
+                   style="padding:12px 18px; text-decoration:none;
+                          border-radius:8px; background:#526fff;
+                          color:white; white-space:nowrap;">
+                    + Add Student
+                </a>
+
+            </div>
+
+            <!-- Search Form -->
+            <form method="GET" action="/students"
+                  style="display:flex; gap:12px; margin:20px 0;">
+
+                <input
+                    type="text"
+                    name="search"
+                    placeholder="Search by name, ID, or email..."
+                    value="{{ search }}"
+                    style="flex:1; min-width:0; padding:12px;
+                           border-radius:8px; border:1px solid #293650;
+                           background:#0b1223; color:#e5e7eb;"
+                >
+
+                <button type="submit"
+                        style="padding:12px 20px; border:0;
+                               border-radius:8px; cursor:pointer;">
+                    Search
+                </button>
+
+                <a href="/students"
+                   style="padding:12px; text-decoration:none;">
+                    Clear
+                </a>
+
+            </form>
+
+            <!-- Students Table -->
+            <div style="overflow-x:auto;">
+                <table style="width:100%; border-collapse:collapse;
+                              text-align:left;">
+
+                    <thead>
+                        <tr>
+                            <th style="padding:14px;">Student ID</th>
+                            <th style="padding:14px;">Name</th>
+                            <th style="padding:14px;">Email</th>
+                            <th style="padding:14px;">Phone</th>
+                            <th style="padding:14px;">CGPA</th>
+                            <th style="padding:14px;">Department</th>
+                            <th style="padding:14px;">Graduation Year</th>
+                            <th style="padding:14px;">Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for student in students %}
+
+                        <tr style="border-top:1px solid #293650;">
+
+                            <td style="padding:14px;">
+                                {{ student[0] }}
+                            </td>
+
+                            <td style="padding:14px;">
+                                {{ student[1] }}
+                            </td>
+
+                            <td style="padding:14px;">
+                                {{ student[2] }}
+                            </td>
+
+                            <td style="padding:14px;">
+                                {{ student[3] }}
+                            </td>
+
+                            <td style="padding:14px;">
+                                {{ "%.2f"|format(student[4]) }}
+                            </td>
+
+                            <td style="padding:14px;">
+                                {{ student[5] }}
+                            </td>
+
+                            <td style="padding:14px;">
+                                {{ student[6] }}
+                            </td>
+
+                            <td style="padding:14px; white-space:nowrap;">
+
+                            <!-- Edit Button -->
+                            <a href="/students/edit/{{ student[0] }}"
+                            style="color:#8da2ff;
+                                    text-decoration:none;
+                                    margin-right:12px;">
+                                Edit
+                            </a>
+
+                            <!-- Delete Button -->
+                            <form method="POST"
+                                action="/students/delete/{{ student[0] }}"
+                                onsubmit="return confirm('Are you sure you want to delete this student?');"
+                                style="display:inline;">
+
+                                <button type="submit"
+                                        style="background:#ef4444;
+                                            color:white;
+                                            border:0;
+                                            padding:7px 12px;
+                                            border-radius:6px;
+                                            cursor:pointer;">
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        </td>
+
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+                            <td colspan="8"
+                                style="padding:24px; text-align:center;">
+                                No students found.
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+
+        </section>
+
+        <footer>
+            Student Placement Management System
+            <span>Powered by Oracle Database</span>
+        </footer>
+
+    </main>
+</div>
+
+</body>
+</html>

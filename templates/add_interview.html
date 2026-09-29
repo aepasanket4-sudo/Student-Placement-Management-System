@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlacementPro | Add Interview</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .form-panel {
+            max-width: 850px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+            margin-top: 25px;
+        }
+
+        .form-group {
+            min-width: 0;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 9px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px 14px;
+            border: 1px solid #30394b;
+            border-radius: 8px;
+            background: #111827;
+            color: #f9fafb;
+            font: inherit;
+            font-size: 14px;
+        }
+
+        .form-hint {
+            margin-top: 8px;
+            color: #929caf;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+            padding-top: 22px;
+            border-top: 1px solid #30394b;
+        }
+
+        .btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            padding: 11px 18px;
+            border: 0;
+            border-radius: 8px;
+            text-decoration: none;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #6366f1;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #252e3d;
+            color: #d1d5db;
+        }
+
+        .flash-message {
+            padding: 13px 16px;
+            margin-bottom: 18px;
+            border-radius: 9px;
+            background: #202b3a;
+            color: #d1d5db;
+            border: 1px solid #374151;
+        }
+
+        @media (max-width: 650px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="app">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <span class="brand-icon">P</span>
+            <span>Placement<span class="accent">Pro</span></span>
+        </div>
+
+        <p class="menu-label">WORKSPACE</p>
+
+        <nav>
+            <a class="nav-link" href="/">▦ &nbsp; Dashboard</a>
+            <a class="nav-link" href="/students">♙ &nbsp; Students</a>
+            <a class="nav-link" href="/companies">▣ &nbsp; Companies</a>
+            <a class="nav-link" href="/jobs">▤ &nbsp; Job Listings</a>
+            <a class="nav-link" href="/applications">⇧ &nbsp; Applications</a>
+            <a class="nav-link active" href="/interviews">◷ &nbsp; Interviews</a>
+            <a class="nav-link" href="#">◆ &nbsp; Placements</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="avatar">PA</div>
+            <div>
+                <strong>Placement Admin</strong>
+                <small>Administrator</small>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main">
+
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">INTERVIEW MANAGEMENT</p>
+                <h1>Add Interview</h1>
+            </div>
+
+            <div class="top-right">
+                <span class="live-dot"></span>
+                <span>Academic Year 2026–27</span>
+                <div class="avatar">PA</div>
+            </div>
+        </header>
+
+        <section class="welcome">
+            <div>
+                <p class="eyebrow">NEW INTERVIEW</p>
+                <h2>Schedule an Interview</h2>
+                <p>Enter the application and interview details below.</p>
+            </div>
+            <div class="welcome-icon">📅</div>
+        </section>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <section class="panel form-panel">
+
+            <div class="panel-heading">
+                <div>
+                    <h3>Interview Details</h3>
+                    <p class="muted">Fields marked with * are required.</p>
+                </div>
+            </div>
+
+            <form method="POST" action="{{ url_for('add_interview') }}">
+
+                <div class="form-grid">
+
+                    <div class="form-group full-width">
+                        <label for="application_id">Student Application *</label>
+
+                        <select class="form-control"
+                                id="application_id"
+                                name="application_id"
+                                required>
+                            <option value="">Select an application</option>
+
+                            {% for application in applications %}
+                            <option value="{{ application.APPLICATION_ID }}">
+                                #{{ application.APPLICATION_ID }} —
+                                {{ application.STUDENT_NAME }} |
+                                {{ application.JOB_TITLE }} |
+                                {{ application.COMPANY_NAME }}
+                            </option>
+                            {% endfor %}
+                        </select>
+
+                        <p class="form-hint">
+                            Select the application for which this interview is scheduled.
+                        </p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="interview_date">Interview Date & Time *</label>
+
+                        <input class="form-control"
+                               type="datetime-local"
+                               id="interview_date"
+                               name="interview_date"
+                               required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="interview_mode">Interview Mode *</label>
+
+                        <select class="form-control"
+                                id="interview_mode"
+                                name="interview_mode"
+                                required>
+                            <option value="">Select mode</option>
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="result">Interview Result *</label>
+
+                        <select class="form-control"
+                                id="result"
+                                name="result"
+                                required>
+                            <option value="Pending" selected>Pending</option>
+                            <option value="Passed">Passed</option>
+                            <option value="Failed">Failed</option>
+                        </select>
+
+                        <p class="form-hint">
+                            Keep the result as Pending until the interview is completed.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        Save Interview
+                    </button>
+
+                    <a href="{{ url_for('interviews') }}"
+                       class="btn btn-secondary">
+                        Cancel
+                    </a>
+                </div>
+
+            </form>
+        </section>
+
+        <footer>
+            Student Placement Management System
+            <span>Powered by Oracle Database</span>
+        </footer>
+
+    </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlacementPro | Edit Interview</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .form-panel {
+            max-width: 850px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+            margin-top: 25px;
+        }
+
+        .form-group {
+            min-width: 0;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 9px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px 14px;
+            border: 1px solid #30394b;
+            border-radius: 8px;
+            background: #111827;
+            color: #f9fafb;
+            font: inherit;
+            font-size: 14px;
+        }
+
+        .form-control:focus {
+            outline: 2px solid #6366f1;
+            outline-offset: 2px;
+        }
+
+        .form-hint {
+            margin-top: 8px;
+            color: #929caf;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+            padding-top: 22px;
+            border-top: 1px solid #30394b;
+        }
+
+        .btn {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            padding: 11px 18px;
+            border: 0;
+            border-radius: 8px;
+            text-decoration: none;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #6366f1;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #252e3d;
+            color: #d1d5db;
+        }
+
+        .flash-message {
+            padding: 13px 16px;
+            margin-bottom: 18px;
+            border-radius: 9px;
+            background: #202b3a;
+            color: #d1d5db;
+            border: 1px solid #374151;
+        }
+
+        @media (max-width: 650px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="app">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <span class="brand-icon">P</span>
+            <span>Placement<span class="accent">Pro</span></span>
+        </div>
+
+        <p class="menu-label">WORKSPACE</p>
+
+        <nav>
+            <a class="nav-link" href="/">▦ &nbsp; Dashboard</a>
+            <a class="nav-link" href="/students">♙ &nbsp; Students</a>
+            <a class="nav-link" href="/companies">▣ &nbsp; Companies</a>
+            <a class="nav-link" href="/jobs">▤ &nbsp; Job Listings</a>
+            <a class="nav-link" href="/applications">⇧ &nbsp; Applications</a>
+            <a class="nav-link active" href="/interviews">◷ &nbsp; Interviews</a>
+            <a class="nav-link" href="#">◆ &nbsp; Placements</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="avatar">PA</div>
+            <div>
+                <strong>Placement Admin</strong>
+                <small>Administrator</small>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main">
+
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">INTERVIEW MANAGEMENT</p>
+                <h1>Edit Interview</h1>
+            </div>
+
+            <div class="top-right">
+                <span class="live-dot"></span>
+                <span>Academic Year 2026–27</span>
+                <div class="avatar">PA</div>
+            </div>
+        </header>
+
+        <section class="welcome">
+            <div>
+                <p class="eyebrow">UPDATE INTERVIEW</p>
+                <h2>Edit Interview #{{ interview.INTERVIEW_ID }}</h2>
+                <p>Update the schedule, mode, or interview result.</p>
+            </div>
+            <div class="welcome-icon">✎</div>
+        </section>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <section class="panel form-panel">
+
+            <div class="panel-heading">
+                <div>
+                    <h3>Interview Details</h3>
+                    <p class="muted">Update the required information below.</p>
+                </div>
+            </div>
+
+            <form method="POST"
+                  action="{{ url_for('edit_interview',
+                                     interview_id=interview.INTERVIEW_ID) }}">
+
+                <div class="form-grid">
+
+                    <div class="form-group full-width">
+                        <label for="application_id">Student Application *</label>
+
+                        <select class="form-control"
+                                id="application_id"
+                                name="application_id"
+                                required>
+
+                            {% for application in applications %}
+                            <option value="{{ application.APPLICATION_ID }}"
+                                {% if application.APPLICATION_ID == interview.APPLICATION_ID %}
+                                    selected
+                                {% endif %}>
+                                #{{ application.APPLICATION_ID }} —
+                                {{ application.STUDENT_NAME }} |
+                                {{ application.JOB_TITLE }} |
+                                {{ application.COMPANY_NAME }}
+                            </option>
+                            {% endfor %}
+
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="interview_date">Interview Date & Time *</label>
+
+                        <input class="form-control"
+                               type="datetime-local"
+                               id="interview_date"
+                               name="interview_date"
+                               value="{{ interview.INTERVIEW_DATE }}"
+                               required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="interview_mode">Interview Mode *</label>
+
+                        <select class="form-control"
+                                id="interview_mode"
+                                name="interview_mode"
+                                required>
+                            <option value="Online"
+                                {% if interview.INTERVIEW_MODE == 'Online' %}
+                                    selected
+                                {% endif %}>
+                                Online
+                            </option>
+
+                            <option value="Offline"
+                                {% if interview.INTERVIEW_MODE == 'Offline' %}
+                                    selected
+                                {% endif %}>
+                                Offline
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="result">Interview Result *</label>
+
+                        <select class="form-control"
+                                id="result"
+                                name="result"
+                                required>
+                            <option value="Pending"
+                                {% if interview.RESULT == 'Pending' %}
+                                    selected
+                                {% endif %}>
+                                Pending
+                            </option>
+
+                            <option value="Passed"
+                                {% if interview.RESULT == 'Passed' %}
+                                    selected
+                                {% endif %}>
+                                Passed
+                            </option>
+
+                            <option value="Failed"
+                                {% if interview.RESULT == 'Failed' %}
+                                    selected
+                                {% endif %}>
+                                Failed
+                            </option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        Update Interview
+                    </button>
+
+                    <a href="{{ url_for('interviews') }}"
+                       class="btn btn-secondary">
+                        Cancel
+                    </a>
+                </div>
+
+            </form>
+        </section>
+
+        <footer>
+            Student Placement Management System
+            <span>Powered by Oracle Database</span>
+        </footer>
+
+    </main>
+</div>
+</body>
+</html>
